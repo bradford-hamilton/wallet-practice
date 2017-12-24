@@ -6,22 +6,22 @@ contract BasicWallet is Mortal {
 
   mapping(address => Permission) permittedAddresses;
 
-  event someoneAddedToSendersList(address personWhoAdded, address personWhoIsAllowedNow, uint amountTheyCanSend);
+  event someoneAddedToSendersList(address _personWhoAdded, address _personWhoIsAllowedNow, uint _amountTheyCanSend);
 
   struct Permission {
     bool isAllowed;
     uint maxTransferAmount;
   }
 
-  function addAddressToSendersList(address permitted, uint maxTransferAmount) onlyOwner {
-    permittedAddresses[permitted] = Permission(true, maxTransferAmount);
-    someoneAddedToSendersList(msg.sender, permitted, maxTransferAmount);
+  function addAddressToSendersList(address _permitted, uint _maxTransferAmount) onlyOwner {
+    permittedAddresses[_permitted] = Permission(true, _maxTransferAmount);
+    someoneAddedToSendersList(msg.sender, _permitted, _maxTransferAmount);
   }
 
-  function sendFunds(address receiver, uint amountInWei) {
+  function sendFunds(address _receiver, uint _amountInWei) {
     if (permittedAddresses[msg.sender].isAllowed) {
-      if (permittedAddresses[msg.sender].maxTransferAmount >= amountInWei) {
-        bool amountActuallySent = receiever.send(amountInWei);
+      if (permittedAddresses[msg.sender].maxTransferAmount >= _amountInWei) {
+        bool amountActuallySent = receiever.send(_amountInWei);
         if (!amountActuallySent) {
           throw;
         }
@@ -33,8 +33,8 @@ contract BasicWallet is Mortal {
     }
   }
 
-  function removeAddressFromSendersList(address theAddress) {
-    delete permittedAddresses[theAdress];
+  function removeAddressFromSendersList(address _theAddress) {
+    delete permittedAddresses[_theAddress];
   }
 
   function payable() {
